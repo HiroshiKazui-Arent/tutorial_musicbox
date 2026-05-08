@@ -2,12 +2,12 @@ import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArtistForm } from '@/components/admin/ArtistForm'
-import { SongForm } from '@/components/admin/SongForm'
+import { AddSongDialog } from '@/components/admin/AddSongDialog'
 import { DeleteSongButton } from './DeleteSongButton'
 import { DeleteArtistButton } from '../DeleteArtistButton'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, Music, Plus, Pencil } from 'lucide-react'
+import { ChevronLeft, Music, Pencil } from 'lucide-react'
 
 export default async function ArtistDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -47,7 +47,7 @@ export default async function ArtistDetailPage({ params }: { params: Promise<{ i
         </div>
         <div className="flex gap-2 flex-shrink-0">
           <Dialog>
-            <DialogTrigger render={<Button variant="outline" size="sm" className="border-zinc-600 text-zinc-300 hover:text-white gap-1" />}>
+            <DialogTrigger render={<Button data-testid="artist-edit-btn" variant="outline" size="sm" className="border-zinc-600 text-zinc-300 hover:text-white gap-1" />}>
               <Pencil className="w-3 h-3" />編集
             </DialogTrigger>
             <DialogContent className="bg-zinc-900 border-zinc-800">
@@ -63,20 +63,12 @@ export default async function ArtistDetailPage({ params }: { params: Promise<{ i
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">楽曲一覧</h2>
-          <Dialog>
-            <DialogTrigger render={<Button size="sm" className="gap-1" />}>
-              <Plus className="w-4 h-4" />楽曲を追加
-            </DialogTrigger>
-            <DialogContent className="bg-zinc-900 border-zinc-800">
-              <DialogHeader><DialogTitle className="text-white">楽曲を追加</DialogTitle></DialogHeader>
-              <SongForm artistId={artist.id} />
-            </DialogContent>
-          </Dialog>
+          <AddSongDialog artistId={artist.id} />
         </div>
 
         <div className="space-y-2">
           {artist.songs.map(song => (
-            <div key={song.id} className="flex items-center gap-4 bg-zinc-800 rounded-lg px-4 py-3">
+            <div key={song.id} data-testid="admin-song-item" className="flex items-center gap-4 bg-zinc-800 rounded-lg px-4 py-3">
               {song.thumbnailPath ? (
                 <img
                   src={`/api/uploads/${song.thumbnailPath}`}

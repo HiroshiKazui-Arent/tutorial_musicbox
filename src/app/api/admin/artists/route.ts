@@ -24,9 +24,12 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const artist = await prisma.artist.create({
-    data: { name, thumbnailPath, bio: formData.get('bio') as string | undefined },
-  })
-
-  return NextResponse.json(artist, { status: 201 })
+  try {
+    const artist = await prisma.artist.create({
+      data: { name, thumbnailPath, bio: formData.get('bio') as string | undefined },
+    })
+    return NextResponse.json(artist, { status: 201 })
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 })
+  }
 }

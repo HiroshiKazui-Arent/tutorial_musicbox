@@ -11,7 +11,7 @@ export function AddArtistDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" className="gap-1" />}>
+      <DialogTrigger render={<Button data-testid="add-artist-btn" size="sm" className="gap-1" />}>
         <Plus className="w-4 h-4" />追加
       </DialogTrigger>
       <DialogContent className="bg-zinc-900 border-zinc-800">

@@ -42,3 +42,8 @@ next-env.d.ts
 
 # uploads (runtime files)
 data/uploads/
+
+# playwright
+/playwright-report/
+/test-results/
+.auth/

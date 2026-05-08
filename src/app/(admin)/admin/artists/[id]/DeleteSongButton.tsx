@@ -17,7 +17,7 @@ export function DeleteSongButton({ id }: { id: string }) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger render={<Button variant="ghost" size="icon" className="text-red-400 hover:text-red-300 hover:bg-red-900/20" />}>
+      <AlertDialogTrigger render={<Button data-testid="delete-song-btn" variant="ghost" size="icon" className="text-red-400 hover:text-red-300 hover:bg-red-900/20" />}>
         <Trash2 className="w-4 h-4" />
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-zinc-900 border-zinc-800">
@@ -27,7 +27,7 @@ export function DeleteSongButton({ id }: { id: string }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="bg-zinc-800 border-zinc-700 text-white">キャンセル</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">削除</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete} data-testid="delete-song-confirm" className="bg-red-600 hover:bg-red-700">削除</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

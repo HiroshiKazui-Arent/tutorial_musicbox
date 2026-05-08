@@ -9,7 +9,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const formData = await req.formData()
+  let formData: FormData
+  try {
+    formData = await req.formData()
+  } catch {
+    return NextResponse.json({ error: 'リクエストの解析に失敗しました。ファイルサイズを確認してください。' }, { status: 400 })
+  }
   const title = formData.get('title') as string
   const artistId = formData.get('artistId') as string
   const audioFile = formData.get('audio') as File | null
@@ -37,10 +42,13 @@ export async function POST(req: NextRequest) {
   const durationStr = formData.get('duration') as string | null
   const duration = durationStr ? parseInt(durationStr) : undefined
 
-  const song = await prisma.song.create({
-    data: { title, artistId, audioPath, thumbnailPath, duration },
-    include: { artist: { select: { id: true, name: true } } },
-  })
-
-  return NextResponse.json(song, { status: 201 })
+  try {
+    const song = await prisma.song.create({
+      data: { title, artistId, audioPath, thumbnailPath, duration },
+      include: { artist: { select: { id: true, name: true } } },
+    })
+    return NextResponse.json(song, { status: 201 })
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 })
+  }
 }

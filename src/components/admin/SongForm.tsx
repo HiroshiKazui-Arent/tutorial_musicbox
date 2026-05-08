@@ -33,8 +33,12 @@ export function SongForm({ artists, artistId: fixedArtistId, onSuccess }: SongFo
       router.refresh()
       onSuccess?.()
     } else {
-      const data = await res.json()
-      toast.error(data.error ?? 'エラーが発生しました')
+      let errorMessage = 'エラーが発生しました'
+      try {
+        const data = await res.json()
+        errorMessage = data.error ?? errorMessage
+      } catch { /* empty or non-JSON error response */ }
+      toast.error(errorMessage)
     }
   }
 
@@ -42,7 +46,7 @@ export function SongForm({ artists, artistId: fixedArtistId, onSuccess }: SongFo
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label>タイトル *</Label>
-        <Input name="title" required className="bg-zinc-800 border-zinc-700 text-white" />
+        <Input name="title" required data-testid="song-title-input" className="bg-zinc-800 border-zinc-700 text-white" />
       </div>
       {!fixedArtistId && (
         <div className="space-y-2">
@@ -61,13 +65,13 @@ export function SongForm({ artists, artistId: fixedArtistId, onSuccess }: SongFo
       )}
       <div className="space-y-2">
         <Label>音楽ファイル * (MP3/WAV/OGG・最大50MB)</Label>
-        <Input name="audio" type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4" required className="bg-zinc-800 border-zinc-700 text-white" />
+        <Input name="audio" type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4" required data-testid="song-audio-input" className="bg-zinc-800 border-zinc-700 text-white" />
       </div>
       <div className="space-y-2">
         <Label>サムネイル画像（カバー画像）</Label>
-        <Input name="thumbnail" type="file" accept="image/jpeg,image/png,image/webp" className="bg-zinc-800 border-zinc-700 text-white" />
+        <Input name="thumbnail" type="file" accept="image/jpeg,image/png,image/webp" data-testid="song-thumbnail-input" className="bg-zinc-800 border-zinc-700 text-white" />
       </div>
-      <Button type="submit" disabled={loading}>{loading ? '保存中...' : '追加'}</Button>
+      <Button type="submit" disabled={loading} data-testid="song-form-submit">{loading ? '保存中...' : '追加'}</Button>
     </form>
   )
 }

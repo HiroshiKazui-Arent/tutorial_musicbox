@@ -27,15 +27,19 @@ export async function PUT(
     }
   }
 
-  const song = await prisma.song.update({
-    where: { id },
-    data: {
-      ...(formData.get('title') && { title: formData.get('title') as string }),
-      ...(formData.get('artistId') && { artistId: formData.get('artistId') as string }),
-      ...(thumbnailPath && { thumbnailPath }),
-    },
-  })
-  return NextResponse.json(song)
+  try {
+    const song = await prisma.song.update({
+      where: { id },
+      data: {
+        ...(formData.get('title') && { title: formData.get('title') as string }),
+        ...(formData.get('artistId') && { artistId: formData.get('artistId') as string }),
+        ...(thumbnailPath && { thumbnailPath }),
+      },
+    })
+    return NextResponse.json(song)
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 })
+  }
 }
 
 export async function DELETE(
@@ -44,6 +48,10 @@ export async function DELETE(
 ) {
   if (!await requireAdmin()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   const { id } = await params
-  await prisma.song.delete({ where: { id } })
-  return NextResponse.json({ ok: true })
+  try {
+    await prisma.song.delete({ where: { id } })
+    return NextResponse.json({ ok: true })
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 })
+  }
 }

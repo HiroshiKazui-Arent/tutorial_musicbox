@@ -39,20 +39,20 @@ export function ArtistForm({ artist, onSuccess }: ArtistFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">名前 *</Label>
-        <Input id="name" name="name" required defaultValue={artist?.name} className="bg-zinc-800 border-zinc-700 text-white" />
+        <Input id="name" name="name" required defaultValue={artist?.name} data-testid="artist-name-input" className="bg-zinc-800 border-zinc-700 text-white" />
       </div>
       <div className="space-y-2">
         <Label htmlFor="bio">Bio</Label>
-        <Textarea id="bio" name="bio" defaultValue={artist?.bio ?? ''} className="bg-zinc-800 border-zinc-700 text-white" />
+        <Textarea id="bio" name="bio" defaultValue={artist?.bio ?? ''} data-testid="artist-bio-input" className="bg-zinc-800 border-zinc-700 text-white" />
       </div>
       <div className="space-y-2">
         <Label>サムネイル画像</Label>
         {artist?.thumbnailPath && (
           <img src={`/api/uploads/${artist.thumbnailPath}`} alt="現在のサムネイル" className="w-20 h-20 object-cover rounded" />
         )}
-        <Input ref={fileRef} name="thumbnail" type="file" accept="image/jpeg,image/png,image/webp" className="bg-zinc-800 border-zinc-700 text-white" />
+        <Input ref={fileRef} name="thumbnail" type="file" accept="image/jpeg,image/png,image/webp" data-testid="artist-thumbnail-input" className="bg-zinc-800 border-zinc-700 text-white" />
       </div>
-      <Button type="submit" disabled={loading}>{loading ? '保存中...' : artist ? '更新' : '追加'}</Button>
+      <Button type="submit" disabled={loading} data-testid="artist-form-submit">{loading ? '保存中...' : artist ? '更新' : '追加'}</Button>
     </form>
   )
 }
